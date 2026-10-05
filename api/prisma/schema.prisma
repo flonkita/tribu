@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+model User {
+  // PostgreSQL générera lui-même un vrai UUID natif
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email     String    @unique
+  username  String    @unique
+  password  String
+  avatarUrl String?
+  role      Role      @default(USER)
+  
+  posts     Post[]
+  comments  Comment[]
+  
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Post {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  content   String    @db.Text
+  
+  authorId  String    @db.Uuid // Doit correspondre au type de l'ID User
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  
+  medias    Media[]
+  comments  Comment[]
+  
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Media {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  url       String
+  type      MediaType
+  
+  postId    String    @db.Uuid
+  post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime  @default(now())
+}
+
+model Comment {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  content   String    @db.Text
+  
+  authorId  String    @db.Uuid
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  
+  postId    String    @db.Uuid
+  post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
