@@ -6,7 +6,6 @@ import { PrismaModule } from './prisma/prisma.module.js';
 import { PostsModule } from './posts/posts.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { MediaModule } from './media/media.module.js';
-import { CommentsModule } from './comments/comments.module.js';
 import { AnswersModule } from './answers/answers.module.js';
 
 @Module({
@@ -16,7 +15,6 @@ import { AnswersModule } from './answers/answers.module.js';
     PostsModule,
     AuthModule,
     MediaModule,
-    CommentsModule,
     AnswersModule,
   ],
   controllers: [AppController],
