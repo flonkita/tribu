@@ -20,7 +20,9 @@ model User {
   // PostgreSQL générera lui-même un vrai UUID natif
   id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email     String    @unique
-  username  String    @unique
+  username  String?    @unique
+  firstName String?
+  lastName  String?
   password  String
   avatarUrl String?
   role      Role      @default(USER)

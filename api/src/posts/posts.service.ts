@@ -18,13 +18,24 @@ export class PostsService {
   async findAll() {
     return this.prisma.post.findMany({
       orderBy: {
-        createdAt: 'desc', // Trie du plus récent au plus ancien
+        createdAt: 'desc',
       },
       include: {
         author: {
           select: {
             username: true,
             avatarUrl: true,
+          },
+        },
+        medias: true,
+        comments: {
+          // <-- On extrait les sucs des commentaires
+          include: {
+            author: {
+              select: {
+                username: true,
+              },
+            },
           },
         },
       },
